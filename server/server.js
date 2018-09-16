@@ -19,14 +19,19 @@ io.on('connection', (socket)=>{
 //     createdAt: 123
 // });
 
-socket.emit('newMessage', {
-    from: 'shubham',
-    text: 'Hey shubham',
-    createdAt: 123
-});
+// socket.emit('newMessage', {
+//     from: 'shubham',
+//     text: 'Hey shubham',
+//     createdAt: 123
+// });
 
-socket.on('createMessage', (mess)=>{
-    console.log('Create message:', mess);
+socket.on('createMessage', (message)=>{
+    console.log('createMessage', message);
+    io.emit('newMessage', {
+      from : message.from,
+      text: message.text,
+      createdAt: new Date().getTime()   
+    });
 });
 
 // socket.on('createEmail', (newEmail)=>{
@@ -35,8 +40,7 @@ socket.on('createMessage', (mess)=>{
 
 socket.on('disconnect', ()=>{
     console.log('User was disconected');
-});
-
+ });
 });
 server.listen(port,()=>{
 
