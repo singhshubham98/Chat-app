@@ -15,7 +15,17 @@ var socket = io();
      }
  }
 socket.on('connect', function(){
-    console.log('connected to server');
+    
+    var params = jQuery.deparam(window.location.search);
+
+    socket.emit('join', params , function(err){
+        if(err){
+            alert(err);
+            window.location.href="/";
+        }else{
+            console.log('No Error');
+        }
+    });
 
 });
 
@@ -23,11 +33,21 @@ socket.on('disconnect', function(){
     console.log('Disconnected from server');
 });
 
+socket.on('updateUserList', function(users){
+    // console.log('Users list', users);
+     var ol = jQuery('<ol></ol>');
+
+     users.forEach(function(user){
+         ol.append(jQuery('<li></li>').text(user));
+     });
+     jQuery('#users').html(ol);
+});
+
 socket.on('newMessage', function(message){
     
     var formattedTime = moment(message.createdAt).format('hh:mm a');
-
     var template = jQuery('#message-template').html();
+    
     var html = Mustache.render(template, {
         text: message.text,
         from: message.from,
@@ -40,7 +60,6 @@ socket.on('newMessage', function(message){
 socket.on('newLocationMessage', function(message){
 
     var formattedTime = moment(message.createdAt).format('hh:mm a');
-
     var template = jQuery('#location-message-template').html();
 
     var html = Mustache.render(template, {
