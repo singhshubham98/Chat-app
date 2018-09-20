@@ -1,8 +1,4 @@
-[{
-    id: '/#12poiajddmsf',
-    name: 'Andrew',
-    room: 'The Office Fans'
-}]
+
 class Users {
     constructor(){
         this.users = [];
@@ -13,11 +9,12 @@ class Users {
         this.users.push(user);
         return user;
     }
-    reomveUser(id){
-        var user = this.users.filter((user)=> user.id === id);
+    removeUser(id){
+        var user = this.users.filter((user)=> user.id === id)[0];
 
         if(user){
-            var users = this.users.filter((user)=> user.id !== id);
+             var users = this.users.filter((user)=> user.id !== id);
+             this.users = users;
         }
 
         return user;
